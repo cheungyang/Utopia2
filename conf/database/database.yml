@@ -1,0 +1,10 @@
+alpha:
+  default:
+    dsn: 'mysql://root@localhost/utopia'
+  farmA:
+    dsn: 'mysql://root@localhost/utopiaA'
+  farmB:
+    dsn: 'mysql://root@localhost/utopiaB'
+beta:
+staging:
+prod:

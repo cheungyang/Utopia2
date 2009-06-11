@@ -1,0 +1,47 @@
+USER:
+  display:		[ permlink, username, password, email ]
+  create:		{ name: text, username: text, password: password, email: text }
+
+SUBSCRIBER:
+  display:		[ permlink, email ]
+  create:		{ name: text, email: text }
+
+PERMISSION:
+  display:		[ permlink, name ]
+  create:		{ name: text }
+
+CATEGORY:
+  display:		[ permlink, name ]
+  create:		{ name: text }
+
+PGROUP:
+  display:		[ permlink, name ]
+  create:		{ name: text }
+
+PAGE:
+  display:		[ permlink, controller, view ]
+  create:		{ name: text, controller: phpeditor, view: fckeditor }
+
+TEMPLATE:
+  display:		[ permlink, controller, structure, templateview, view ]
+  create:		{ name: text, controller: phpeditor, structure: textarea, templateview: fckeditor, view: fckeditor }
+
+FORM:
+  display:		[ permlink, preprocess, structure, process, view ]
+  create:		{ name: text, preprocess: phpeditor, structure: textarea, process: phpeditor, view: fckeditor }
+
+WALL:
+  display:		[ permlink, name ]
+  create:		{ name: text }
+
+RESOURCE:
+  display:		[ permlink, name ]
+  create:		{ name: text }
+
+EMAIL:
+  display:		[ permlink, name ]
+  create:		{ name: text }
+
+ANNOUNCEMENT:
+  display:		[ permlink, name ]
+  create:		{ name: text }

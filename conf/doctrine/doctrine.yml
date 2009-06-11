@@ -1,0 +1,1157 @@
+---
+Entity: 
+  tableName: entity
+  actAs: 
+    Timestampable: 
+    Sluggable: 
+      fields: 
+        - name
+      name: permlink
+      unqiue: false
+      canUpdate: true
+  options: 
+    type: InnoDB
+    collate: utf8_unicode_ci
+    charset: utf8
+  columns: 
+    id: 
+      type: integer(20)
+      primary: true
+      autoincrement: true
+    property: 
+      type: enum
+      values: 
+        - MALLOCWORKS
+        - WILGRIST
+      notnull: true
+    model: 
+      type: enum
+      values: 
+        - USER
+        - SUBSCRIBER
+        - PERMISSION
+        - CATEGORY
+        - PGROUP
+        - PAGE
+        - TEMPLATE
+        - FORM
+        - WALL
+        - RESOURCE
+        - EMAIL
+        - ANNOUNCEMENT
+      notnull: true
+    name: 
+      type: string(100)
+      notnull: true
+    is_active: 
+      type: integer(1)
+      default: 1
+    is_block: 
+      type: integer(1)
+      default: 0
+    is_close: 
+      type: integer(1)
+      default: 0
+    is_delete: 
+      type: integer(1)
+      default: 0
+  relations: 
+    Maps: 
+      class: Entity
+      foreignAlias: Entity
+      refClass: Map
+      foreign: tgt_id
+      local: src_id
+    Owns: 
+      class: Entity
+      foreignAlias: Entity
+      refClass: Own
+      foreign: tgt_id
+      local: src_id
+  indexes: 
+    idx_permlink: 
+      fields: 
+        - property
+        - model
+        - permlink
+      type: unique
+Map: 
+  tableName: map
+  actAs: 
+    - Timestampable
+  options: 
+    type: InnoDB
+    collate: utf8_unicode_ci
+    charset: utf8
+  columns: 
+    src_id: 
+      type: integer(20)
+      primary: true
+    tgt_id: 
+      type: integer(20)
+      primary: true
+    src_model: 
+      type: enum
+      values: 
+        - USER
+        - SUBSCRIBER
+        - PERMISSION
+        - CATEGORY
+        - PGROUP
+        - PAGE
+        - TEMPLATE
+        - FORM
+        - WALL
+        - RESOURCE
+        - EMAIL
+        - ANNOUNCEMENT
+      notnull: true
+    tgt_model: 
+      type: enum
+      values: 
+        - USER
+        - SUBSCRIBER
+        - PERMISSION
+        - CATEGORY
+        - PGROUP
+        - PAGE
+        - TEMPLATE
+        - FORM
+        - WALL
+        - RESOURCE
+        - EMAIL
+        - ANNOUNCEMENT
+      notnull: true
+    is_active: 
+      type: integer(1)
+      default: 1
+    is_block: 
+      type: integer(1)
+      default: 0
+    is_close: 
+      type: integer(1)
+      default: 0
+    is_delete: 
+      type: integer(1)
+      default: 0
+  relations: 
+    Entity: 
+      local: tgt_id
+      foreign: id
+      foreignAlias: Map
+Own: 
+  tableName: own
+  actAs: 
+    - Timestampable
+  options: 
+    type: InnoDB
+    collate: utf8_unicode_ci
+    charset: utf8
+  columns: 
+    src_id: 
+      type: integer(20)
+      primary: true
+    tgt_id: 
+      type: integer(20)
+      primary: true
+    src_model: 
+      type: enum
+      values: 
+        - USER
+        - SUBSCRIBER
+        - PERMISSION
+        - CATEGORY
+        - PGROUP
+        - PAGE
+        - TEMPLATE
+        - FORM
+        - WALL
+        - RESOURCE
+        - EMAIL
+        - ANNOUNCEMENT
+      notnull: true
+    tgt_model: 
+      type: enum
+      values: 
+        - USER
+        - SUBSCRIBER
+        - PERMISSION
+        - CATEGORY
+        - PGROUP
+        - PAGE
+        - TEMPLATE
+        - FORM
+        - WALL
+        - RESOURCE
+        - EMAIL
+        - ANNOUNCEMENT
+      notnull: true
+    rel: 
+      type: enum
+      values: >
+        ['OWN', 'REQUEST', 'INVITE', 'CONNECT']
+        }
+      default: OWN
+      notnull: true
+    is_active: 
+      type: integer(1)
+      default: 1
+    is_block: 
+      type: integer(1)
+      default: 0
+    is_close: 
+      type: integer(1)
+      default: 0
+    is_delete: 
+      type: integer(1)
+      default: 0
+  relations: 
+    Entity: 
+      local: tgt_id
+      foreign: id
+      foreignAlias: Own
+User: 
+  actAs: 
+    Timestampable: 
+  options: 
+    type: InnoDB
+    collate: utf8_unicode_ci
+    charset: utf8
+  columns: 
+    id: 
+      type: integer(20)
+      primary: true
+      autoincrement: true
+    name: 
+      type: string(100)
+      notnull: true
+    entity_id: 
+      type: integer(20)
+      notnull: true
+    is_active: 
+      type: integer(1)
+      default: 1
+    is_block: 
+      type: integer(1)
+      default: 0
+    is_close: 
+      type: integer(1)
+      default: 0
+    is_delete: 
+      type: integer(1)
+      default: 0
+    username: 
+      type: string(50)
+      notnull: true
+    password: 
+      type: string(64)
+      notnull: true
+    email: 
+      type: string(50)
+      notnull: true
+    version: 
+      type: integer(11)
+      notnull: true
+  relations: 
+    Entity: 
+      local: entity_id
+      foreign: id
+  indexes: 
+    entity_idx: 
+      fields: 
+        - entity_id
+  tableName: user
+User_version: 
+  actAs: 
+    Timestampable: 
+  options: 
+    type: InnoDB
+    collate: utf8_unicode_ci
+    charset: utf8
+  columns: 
+    id: 
+      type: integer(20)
+      primary: true
+      autoincrement: true
+    name: 
+      type: string(100)
+      notnull: true
+    entity_id: 
+      type: integer(20)
+      notnull: true
+    is_active: 
+      type: integer(1)
+      default: 1
+    is_block: 
+      type: integer(1)
+      default: 0
+    is_close: 
+      type: integer(1)
+      default: 0
+    is_delete: 
+      type: integer(1)
+      default: 0
+    username: 
+      type: string(50)
+      notnull: true
+    password: 
+      type: string(64)
+      notnull: true
+    email: 
+      type: string(50)
+      notnull: true
+    version: 
+      type: integer(11)
+      notnull: true
+  relations: 
+    Entity: 
+      local: entity_id
+      foreign: id
+  indexes: 
+    entity_idx: 
+      fields: 
+        - entity_id
+  tableName: user_version
+Subscriber: 
+  actAs: 
+    Timestampable: 
+  options: 
+    type: InnoDB
+    collate: utf8_unicode_ci
+    charset: utf8
+  columns: 
+    id: 
+      type: integer(20)
+      primary: true
+      autoincrement: true
+    name: 
+      type: string(100)
+      notnull: true
+    entity_id: 
+      type: integer(20)
+      notnull: true
+    is_active: 
+      type: integer(1)
+      default: 1
+    is_block: 
+      type: integer(1)
+      default: 0
+    is_close: 
+      type: integer(1)
+      default: 0
+    is_delete: 
+      type: integer(1)
+      default: 0
+    email: 
+      type: string(50)
+      notnull: true
+  relations: 
+    Entity: 
+      local: entity_id
+      foreign: id
+  indexes: 
+    entity_idx: 
+      fields: 
+        - entity_id
+  tableName: subscriber
+Permission: 
+  actAs: 
+    Timestampable: 
+  options: 
+    type: InnoDB
+    collate: utf8_unicode_ci
+    charset: utf8
+  columns: 
+    id: 
+      type: integer(20)
+      primary: true
+      autoincrement: true
+    name: 
+      type: string(100)
+      notnull: true
+    entity_id: 
+      type: integer(20)
+      notnull: true
+    is_active: 
+      type: integer(1)
+      default: 1
+    is_block: 
+      type: integer(1)
+      default: 0
+    is_close: 
+      type: integer(1)
+      default: 0
+    is_delete: 
+      type: integer(1)
+      default: 0
+    description: 
+      type: clob
+      notnull: true
+    cult: 
+      type: enum
+      values: 
+        - ZH
+        - EN
+        - CH
+        - NONE
+      default: NONE
+      notnull: true
+  relations: 
+    Entity: 
+      local: entity_id
+      foreign: id
+  indexes: 
+    entity_idx: 
+      fields: 
+        - entity_id
+  tableName: permission
+Category: 
+  actAs: 
+    Timestampable: 
+  options: 
+    type: InnoDB
+    collate: utf8_unicode_ci
+    charset: utf8
+  columns: 
+    id: 
+      type: integer(20)
+      primary: true
+      autoincrement: true
+    name: 
+      type: string(100)
+      notnull: true
+    entity_id: 
+      type: integer(20)
+      notnull: true
+    is_active: 
+      type: integer(1)
+      default: 1
+    is_block: 
+      type: integer(1)
+      default: 0
+    is_close: 
+      type: integer(1)
+      default: 0
+    is_delete: 
+      type: integer(1)
+      default: 0
+    description: 
+      type: clob
+      notnull: true
+    cult: 
+      type: enum
+      values: 
+        - ZH
+        - EN
+        - CH
+        - NONE
+      default: NONE
+      notnull: true
+  relations: 
+    Entity: 
+      local: entity_id
+      foreign: id
+  indexes: 
+    entity_idx: 
+      fields: 
+        - entity_id
+  tableName: category
+Pgroup: 
+  actAs: 
+    Timestampable: 
+  options: 
+    type: InnoDB
+    collate: utf8_unicode_ci
+    charset: utf8
+  columns: 
+    id: 
+      type: integer(20)
+      primary: true
+      autoincrement: true
+    name: 
+      type: string(100)
+      notnull: true
+    entity_id: 
+      type: integer(20)
+      notnull: true
+    is_active: 
+      type: integer(1)
+      default: 1
+    is_block: 
+      type: integer(1)
+      default: 0
+    is_close: 
+      type: integer(1)
+      default: 0
+    is_delete: 
+      type: integer(1)
+      default: 0
+    description: 
+      type: clob
+      notnull: true
+    cult: 
+      type: enum
+      values: 
+        - ZH
+        - EN
+        - CH
+        - NONE
+      default: NONE
+      notnull: true
+  relations: 
+    Entity: 
+      local: entity_id
+      foreign: id
+  indexes: 
+    entity_idx: 
+      fields: 
+        - entity_id
+  tableName: pgroup
+Page: 
+  actAs: 
+    Timestampable: 
+  options: 
+    type: InnoDB
+    collate: utf8_unicode_ci
+    charset: utf8
+  columns: 
+    id: 
+      type: integer(20)
+      primary: true
+      autoincrement: true
+    name: 
+      type: string(100)
+      notnull: true
+    entity_id: 
+      type: integer(20)
+      notnull: true
+    is_active: 
+      type: integer(1)
+      default: 1
+    is_block: 
+      type: integer(1)
+      default: 0
+    is_close: 
+      type: integer(1)
+      default: 0
+    is_delete: 
+      type: integer(1)
+      default: 0
+    view: 
+      type: clob
+      notnull: true
+    controller: 
+      type: clob
+      notnull: true
+    cult: 
+      type: enum
+      values: 
+        - ZH
+        - EN
+        - CH
+        - NONE
+      default: NONE
+      notnull: true
+    version: 
+      type: integer(11)
+      notnull: true
+  relations: 
+    Entity: 
+      local: entity_id
+      foreign: id
+  indexes: 
+    entity_idx: 
+      fields: 
+        - entity_id
+  tableName: page
+Page_version: 
+  actAs: 
+    Timestampable: 
+  options: 
+    type: InnoDB
+    collate: utf8_unicode_ci
+    charset: utf8
+  columns: 
+    id: 
+      type: integer(20)
+      primary: true
+      autoincrement: true
+    name: 
+      type: string(100)
+      notnull: true
+    entity_id: 
+      type: integer(20)
+      notnull: true
+    is_active: 
+      type: integer(1)
+      default: 1
+    is_block: 
+      type: integer(1)
+      default: 0
+    is_close: 
+      type: integer(1)
+      default: 0
+    is_delete: 
+      type: integer(1)
+      default: 0
+    view: 
+      type: clob
+      notnull: true
+    controller: 
+      type: clob
+      notnull: true
+    cult: 
+      type: enum
+      values: 
+        - ZH
+        - EN
+        - CH
+        - NONE
+      default: NONE
+      notnull: true
+    version: 
+      type: integer(11)
+      notnull: true
+  relations: 
+    Entity: 
+      local: entity_id
+      foreign: id
+  indexes: 
+    entity_idx: 
+      fields: 
+        - entity_id
+  tableName: page_version
+Template: 
+  actAs: 
+    Timestampable: 
+  options: 
+    type: InnoDB
+    collate: utf8_unicode_ci
+    charset: utf8
+  columns: 
+    id: 
+      type: integer(20)
+      primary: true
+      autoincrement: true
+    name: 
+      type: string(100)
+      notnull: true
+    entity_id: 
+      type: integer(20)
+      notnull: true
+    is_active: 
+      type: integer(1)
+      default: 1
+    is_block: 
+      type: integer(1)
+      default: 0
+    is_close: 
+      type: integer(1)
+      default: 0
+    is_delete: 
+      type: integer(1)
+      default: 0
+    templateview: 
+      type: clob
+      notnull: true
+    view: 
+      type: clob
+      notnull: true
+    controller: 
+      type: clob
+      notnull: true
+    structure: 
+      type: clob
+      notnull: true
+    cult: 
+      type: enum
+      values: 
+        - ZH
+        - EN
+        - CH
+        - NONE
+      default: NONE
+      notnull: true
+    version: 
+      type: integer(11)
+      notnull: true
+  relations: 
+    Entity: 
+      local: entity_id
+      foreign: id
+  indexes: 
+    entity_idx: 
+      fields: 
+        - entity_id
+  tableName: template
+Template_version: 
+  actAs: 
+    Timestampable: 
+  options: 
+    type: InnoDB
+    collate: utf8_unicode_ci
+    charset: utf8
+  columns: 
+    id: 
+      type: integer(20)
+      primary: true
+      autoincrement: true
+    name: 
+      type: string(100)
+      notnull: true
+    entity_id: 
+      type: integer(20)
+      notnull: true
+    is_active: 
+      type: integer(1)
+      default: 1
+    is_block: 
+      type: integer(1)
+      default: 0
+    is_close: 
+      type: integer(1)
+      default: 0
+    is_delete: 
+      type: integer(1)
+      default: 0
+    templateview: 
+      type: clob
+      notnull: true
+    view: 
+      type: clob
+      notnull: true
+    controller: 
+      type: clob
+      notnull: true
+    structure: 
+      type: clob
+      notnull: true
+    cult: 
+      type: enum
+      values: 
+        - ZH
+        - EN
+        - CH
+        - NONE
+      default: NONE
+      notnull: true
+    version: 
+      type: integer(11)
+      notnull: true
+  relations: 
+    Entity: 
+      local: entity_id
+      foreign: id
+  indexes: 
+    entity_idx: 
+      fields: 
+        - entity_id
+  tableName: template_version
+Form: 
+  actAs: 
+    Timestampable: 
+  options: 
+    type: InnoDB
+    collate: utf8_unicode_ci
+    charset: utf8
+  columns: 
+    id: 
+      type: integer(20)
+      primary: true
+      autoincrement: true
+    name: 
+      type: string(100)
+      notnull: true
+    entity_id: 
+      type: integer(20)
+      notnull: true
+    is_active: 
+      type: integer(1)
+      default: 1
+    is_block: 
+      type: integer(1)
+      default: 0
+    is_close: 
+      type: integer(1)
+      default: 0
+    is_delete: 
+      type: integer(1)
+      default: 0
+    preprocess: 
+      type: clob
+      notnull: true
+    structure: 
+      type: clob
+      notnull: true
+    process: 
+      type: clob
+      notnull: true
+    view: 
+      type: clob
+      notnull: true
+    cult: 
+      type: enum
+      values: 
+        - ZH
+        - EN
+        - CH
+        - NONE
+      default: NONE
+      notnull: true
+    version: 
+      type: integer(11)
+      notnull: true
+  relations: 
+    Entity: 
+      local: entity_id
+      foreign: id
+  indexes: 
+    entity_idx: 
+      fields: 
+        - entity_id
+  tableName: form
+Form_version: 
+  actAs: 
+    Timestampable: 
+  options: 
+    type: InnoDB
+    collate: utf8_unicode_ci
+    charset: utf8
+  columns: 
+    id: 
+      type: integer(20)
+      primary: true
+      autoincrement: true
+    name: 
+      type: string(100)
+      notnull: true
+    entity_id: 
+      type: integer(20)
+      notnull: true
+    is_active: 
+      type: integer(1)
+      default: 1
+    is_block: 
+      type: integer(1)
+      default: 0
+    is_close: 
+      type: integer(1)
+      default: 0
+    is_delete: 
+      type: integer(1)
+      default: 0
+    preprocess: 
+      type: clob
+      notnull: true
+    structure: 
+      type: clob
+      notnull: true
+    process: 
+      type: clob
+      notnull: true
+    view: 
+      type: clob
+      notnull: true
+    cult: 
+      type: enum
+      values: 
+        - ZH
+        - EN
+        - CH
+        - NONE
+      default: NONE
+      notnull: true
+    version: 
+      type: integer(11)
+      notnull: true
+  relations: 
+    Entity: 
+      local: entity_id
+      foreign: id
+  indexes: 
+    entity_idx: 
+      fields: 
+        - entity_id
+  tableName: form_version
+Wall: 
+  actAs: 
+    Timestampable: 
+  options: 
+    type: InnoDB
+    collate: utf8_unicode_ci
+    charset: utf8
+  columns: 
+    id: 
+      type: integer(20)
+      primary: true
+      autoincrement: true
+    name: 
+      type: string(100)
+      notnull: true
+    entity_id: 
+      type: integer(20)
+      notnull: true
+    is_active: 
+      type: integer(1)
+      default: 1
+    is_block: 
+      type: integer(1)
+      default: 0
+    is_close: 
+      type: integer(1)
+      default: 0
+    is_delete: 
+      type: integer(1)
+      default: 0
+    message: 
+      type: clob
+      notnull: true
+    seq: 
+      type: integer(11)
+      notnull: true
+  relations: 
+    Entity: 
+      local: entity_id
+      foreign: id
+  indexes: 
+    entity_idx: 
+      fields: 
+        - entity_id
+  tableName: wall
+Resource: 
+  actAs: 
+    Timestampable: 
+  options: 
+    type: InnoDB
+    collate: utf8_unicode_ci
+    charset: utf8
+  columns: 
+    id: 
+      type: integer(20)
+      primary: true
+      autoincrement: true
+    name: 
+      type: string(100)
+      notnull: true
+    entity_id: 
+      type: integer(20)
+      notnull: true
+    is_active: 
+      type: integer(1)
+      default: 1
+    is_block: 
+      type: integer(1)
+      default: 0
+    is_close: 
+      type: integer(1)
+      default: 0
+    is_delete: 
+      type: integer(1)
+      default: 0
+    description: 
+      type: clob
+      notnull: true
+    filename: 
+      type: string(50)
+      notnull: true
+    oldfilename: 
+      type: string(50)
+      notnull: true
+    filetype: 
+      type: string(20)
+      notnull: true
+    filesize: 
+      type: integer(10)
+      notnull: true
+    cult: 
+      type: enum
+      values: 
+        - ZH
+        - EN
+        - CH
+        - NONE
+      default: NONE
+      notnull: true
+    seq: 
+      type: integer(11)
+      notnull: true
+    version: 
+      type: integer(11)
+      notnull: true
+  relations: 
+    Entity: 
+      local: entity_id
+      foreign: id
+  indexes: 
+    entity_idx: 
+      fields: 
+        - entity_id
+  tableName: resource
+Resource_version: 
+  actAs: 
+    Timestampable: 
+  options: 
+    type: InnoDB
+    collate: utf8_unicode_ci
+    charset: utf8
+  columns: 
+    id: 
+      type: integer(20)
+      primary: true
+      autoincrement: true
+    name: 
+      type: string(100)
+      notnull: true
+    entity_id: 
+      type: integer(20)
+      notnull: true
+    is_active: 
+      type: integer(1)
+      default: 1
+    is_block: 
+      type: integer(1)
+      default: 0
+    is_close: 
+      type: integer(1)
+      default: 0
+    is_delete: 
+      type: integer(1)
+      default: 0
+    description: 
+      type: clob
+      notnull: true
+    filename: 
+      type: string(50)
+      notnull: true
+    oldfilename: 
+      type: string(50)
+      notnull: true
+    filetype: 
+      type: string(20)
+      notnull: true
+    filesize: 
+      type: integer(10)
+      notnull: true
+    cult: 
+      type: enum
+      values: 
+        - ZH
+        - EN
+        - CH
+        - NONE
+      default: NONE
+      notnull: true
+    seq: 
+      type: integer(11)
+      notnull: true
+    version: 
+      type: integer(11)
+      notnull: true
+  relations: 
+    Entity: 
+      local: entity_id
+      foreign: id
+  indexes: 
+    entity_idx: 
+      fields: 
+        - entity_id
+  tableName: resource_version
+Email: 
+  actAs: 
+    Timestampable: 
+  options: 
+    type: InnoDB
+    collate: utf8_unicode_ci
+    charset: utf8
+  columns: 
+    id: 
+      type: integer(20)
+      primary: true
+      autoincrement: true
+    name: 
+      type: string(100)
+      notnull: true
+    entity_id: 
+      type: integer(20)
+      notnull: true
+    is_active: 
+      type: integer(1)
+      default: 1
+    is_block: 
+      type: integer(1)
+      default: 0
+    is_close: 
+      type: integer(1)
+      default: 0
+    is_delete: 
+      type: integer(1)
+      default: 0
+    mailfrom: 
+      type: string(50)
+      notnull: true
+    mailto: 
+      type: clob
+      notnull: true
+    mailcc: 
+      type: clob
+      notnull: true
+    mailbcc: 
+      type: clob
+      notnull: true
+    title: 
+      type: clob
+      notnull: true
+    content: 
+      type: clob
+      notnull: true
+  relations: 
+    Entity: 
+      local: entity_id
+      foreign: id
+  indexes: 
+    entity_idx: 
+      fields: 
+        - entity_id
+  tableName: email
+Announcement: 
+  actAs: 
+    Timestampable: 
+  options: 
+    type: InnoDB
+    collate: utf8_unicode_ci
+    charset: utf8
+  columns: 
+    id: 
+      type: integer(20)
+      primary: true
+      autoincrement: true
+    name: 
+      type: string(100)
+      notnull: true
+    entity_id: 
+      type: integer(20)
+      notnull: true
+    is_active: 
+      type: integer(1)
+      default: 1
+    is_block: 
+      type: integer(1)
+      default: 0
+    is_close: 
+      type: integer(1)
+      default: 0
+    is_delete: 
+      type: integer(1)
+      default: 0
+    content: 
+      type: clob
+      notnull: true
+  relations: 
+    Entity: 
+      local: entity_id
+      foreign: id
+  indexes: 
+    entity_idx: 
+      fields: 
+        - entity_id
+  tableName: announcement

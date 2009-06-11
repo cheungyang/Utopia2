@@ -1,0 +1,102 @@
+user_add: 
+  class:  EntityAddCommand
+  params: { model: USER }
+  permission: ~
+page_add: 
+  class:  EntityAddCommand
+  params: { model: PAGE }
+  permission: ~  
+page_edit: 
+  class:  EntityEditCommand
+  params: { model: PAGE }
+  permission: ~  
+page_fetch: 
+  class:  EntityFetchCommand
+  params: { model: PAGE }
+  permission: ~
+page_search: 
+  class:  EntitySearchCommand
+  params: { model: PAGE }
+  permission: ~
+page_revert: 
+  class:  EntityRevertCommand
+  params: { model: PAGE }
+  permission: ~
+page_map: 
+  class:  EntityMapCommand
+  params: { model: PAGE }
+  permission: ~  
+
+entity:
+  add:
+    params:
+      property: { required: true }
+      model:    { required: true }
+      name:    	{ required: true }
+      inputs:   { required: true }
+#for revert      
+      versiondb:  { default: true }		
+#for new version/seq/cult
+      id:		  { default: '' }
+      newcult:	  { default: false }
+      newversion: { default: false }
+      newseq:	  { default: false }
+  edit:
+    params:
+      property: { required: true }
+      model:    { required: true }
+      id:		{ required: true }
+      inputs:   { required: true }
+#to make changes to entity      
+      deepupdate: { default: false }	
+      cult:		 ~
+      seq:		 ~
+      version:	 ~
+  fetch:
+    params:
+      property: { required: true }
+      model:    { required: true }
+#to load from version db if exist      
+      restricted: { default: true }		
+      versiondb:  { default: false }
+#to load mutliple ids if wanted      
+      ids:		{ required: true }		
+      cult:	 	~						
+#warning: does not make sense if multiple ids used      
+      seq:		~						
+#warning: does not make sense if multiple ids used      
+      version:	~						
+  search:
+    params:
+      property: { required: true }
+      model:    { required: true }
+      offset: 	{ default: 0 }
+      limit: 	{ default: 10 }
+      restricted: { default: true }
+#to load from version db if exist      
+      versiondb:  { default: false }	
+      sort: 	 { default: 'created_at ASC' }      
+      permlinks: ~
+      where:	 ~     
+      cult:		 ~
+#warning: does not make sense if multiple ids used      
+      seq:		 ~						
+#warning: does not make sense if multiple ids used      
+      version:	 ~						
+  revert:
+    params:
+      property: { required: true }
+      model:    { required: true }
+      id:		{ required: true }
+      cult:		 ~
+      seq:		 ~
+      version:	 ~
+  map:
+    params:
+      property: { required: true }
+      model:    { required: true }
+      id:		{ required: true }
+      tgtmodel: { required: true }
+      tgtid:	{ required: true }      
+      relationship: { required: true }
+      flags: 	{ default: [ ] }

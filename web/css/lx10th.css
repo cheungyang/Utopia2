@@ -1,0 +1,36 @@
+body{
+	background: url(../img/bg/paper.gif);
+}
+
+.container{
+	background: #FFFFFF;
+	border-right: #996600 2px solid;
+	border-left: #996600 2px solid;	
+}
+
+#lx10th_netvigation{
+	padding: 0px 0px 20px 90px;
+}
+
+#lx10th_netvigation li{
+	float: left;
+	list-style: none;
+	margin: 1px;
+}
+
+#lx10th_netvigation li a{
+	display: block;
+	text-decoration: none;
+	border: 1px #CCCCCC solid;
+	padding: 1px;
+}
+
+#lx10th_netvigation li a:hover{
+	border: 1px #FF0000 solid;
+	background: #FF3300;
+}
+
+#lx10th_netvigation .current{
+	background: #FFAC84; 
+	border: 1px #FF3300 solid;
+}
