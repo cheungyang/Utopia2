@@ -24,7 +24,7 @@ class Validator
 		    	{
 		    		if (isset($specopt['required']) && $specopt['required'])
 		    		{
-		    			$rtn['errors'][] = new Exception("required field '$specname' missing", ERROR_REQUIRED_MISSING);
+		    			$rtn['errors'][] = new Exception("required field '$specname' missing, required ".implode(',',array_keys($spec)), ERROR_REQUIRED_MISSING);
 		    		}	
 		    		elseif (isset($specopt['default']) && !empty($specopt['default']))
 		    		{

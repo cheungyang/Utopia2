@@ -43,6 +43,7 @@ if ($filename === false)
 	throw new Exception('failed getting SettingFactory', ERROR_FILE_NOT_FOUND);
 }
 require_once($filename);
+$settings = SettingFactory::getSettings(array('env'=>'alpha', 'property'=>'MALLOCWORKS'));
 
 
 //if (strpos('@php_bin@', '@php_bin') === 0) {

@@ -1,0 +1,97 @@
+BASE:
+
+  PAGE:
+    properties:	  { translateable: true, chainable: false, versionable: true }
+    datasource:   file
+    columns:
+      view:       { type: clob, required: true, validators: [], default: ~, values: ~ }
+      controller: { type: clob, required: true, validators: [], default: ~, values: ~ }
+
+  TEMPLATE:
+    properties:	  { translateable: true, chainable: false, versionable: true }
+    datasource:   file
+    columns:
+      view:	  { type: clob, required: true, validators: [], default: ~, values: ~ }
+      controller: { type: clob, required: true, validators: [], default: ~, values: ~ }
+      structure:  { type: clob, required: true, validators: [], default: ~, values: ~ }
+
+  FORM:
+    properties:	  { translateable: true, chainable: false, versionable: true }
+    datasource:   file
+    columns:
+      preprocess: { type: clob, required: true, validators: [], default: ~, values: ~ }
+      structure:  { type: clob, required: true, validators: [], default: ~, values: ~ }
+      process:	  { type: clob, required: true, validators: [], default: ~, values: ~ }
+      view:       { type: clob, required: true, validators: [], default: ~, values: ~ }
+
+#-----------------------------------------
+USER_CENTRAL:
+
+  USER:
+    properties:	  { translateable: false, chainable: false, versionable: true }
+    datasource:   mysql
+    columns:
+      username:   { type: string(50), required: true, validators: [], default: ~, values: ~ }
+      password:   { type: string(64), required: true, validators: [], default: ~, values: ~ }
+      email:      { type: string(50), required: true, validators: [], default: ~, values: ~ }
+
+  PERMISSION:
+    properties:	  { translateable: true, chainable: false, versionable: false }
+    datasource:   mysql
+    columns:
+      description:{ type: clob, required: true, validators: [], default: ~, values: ~ }
+
+  PGROUP:
+    properties:	  { translateable: true, chainable: false, versionable: false }
+    datasource:   mysql
+    columns:
+      description:{ type: clob, required: true, validators: [], default: ~, values: ~ }
+
+
+#-----------------------------------------
+MALLOCWORKS:
+
+  SUBSCRIBER:
+    properties:	  { translateable: false, chainable: false, versionable: false }
+    datasource:   mysql
+    columns:
+      email:      { type: string(50), required: true, validators: [], default: ~, values: ~ }
+
+  CATEGORY:
+    properties:	  { translateable: true, chainable: false, versionable: false }
+    datasource:   mysql
+    columns:
+      description:{ type: clob, required: true, validators: [], default: ~, values: ~ }
+
+  WALL:
+    properties:   { translateable: false, chainable: true, versionable: false }
+    datasource:   mysql
+    columns:
+      message:    { type: clob, required: true, validators: [], default: ~, values: ~ }
+
+  RESOURCE:
+    properties:   { translateable: true, chainable: true, versionable: true }
+    datasource:   mysql
+    columns:
+      description: { type: clob      , required: true, validators: [], default: ~, values: ~ }
+      filename:    { type: string(50), required: true, validators: [], default: ~, values: ~ }
+      oldfilename: { type: string(50), required: true, validators: [], default: ~, values: ~ }
+      filetype:	   { type: string(20), required: true, validators: [], default: ~, values: ~ }
+      filesize:	   { type: integer(10), required: true, validators: [], default: ~, values: ~ }
+
+  EMAIL:
+    properties:	  { translateable: false, chainable: false, versionable: false }
+    datasource:   mysql
+    columns:
+      mailfrom:	{ type: string(50), required: true, validators: [], default: ~, values: ~ }
+      mailto:   { type: clob, required: true, validators: [], default: ~, values: ~ }
+      mailcc:   { type: clob, required: true, validators: [], default: ~, values: ~ }
+      mailbcc:  { type: clob, required: true, validators: [], default: ~, values: ~ }
+      title:    { type: clob, required: true, validators: [], default: ~, values: ~ }
+      content:  { type: clob, required: true, validators: [], default: ~, values: ~ }
+
+  ANNOUNCEMENT:
+    properties: { translateable: false, chainable: false, versionable: false }
+    datasource:   mysql
+    columns:
+      content:  { type: clob, required: true, validators: [], default: ~, values: ~ }

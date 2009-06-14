@@ -3,11 +3,13 @@ class AllTests
 {
 	private static function includeTests($indir)
 	{
+		$indir='/home/utopia/source/tests';
+		
 		$getstr = 'Test.php';
 		$getstrlen = -1 * strlen($getstr);
 		$filenames = array();
 		$dirs = array($indir);
-		
+
 		reset($dirs);
 		while (current($dirs) !== false)
 		{

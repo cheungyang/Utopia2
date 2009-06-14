@@ -1,6 +1,7 @@
 <?php
 require_once('Constant.php');
-require_once('Autoload.php');		
+//move the include class here to make use of the dimension variable.
+require_once('Autoload.php');
 
 class SettingFactory
 {
@@ -27,7 +28,7 @@ class SettingFactory
 		 * =============================== */
 		$this->spec = array(
 			'env'=>array('required'=>true),
-			'property'=>array(),
+			'property'=>array('required'=>true),
 		);		
 	}
 	
@@ -53,14 +54,24 @@ class SettingFactory
 	}	
 	
 	private function __construct($dimension)
-	{
+	{				
 		$this->configSettings();
 		
+//		if (isset($dimension['property']))
+//		{
+//			putenv("PROPERTY={$dimension['property']}");
+//		}
+				
 		$validator = ValidatorFactory::getValidator($dimension, $this->spec);
 		$validatorrtn = $validator->execute();
 		if ($validatorrtn['status'] === SUCCESS)
 		{
-			$this->dimension = $validatorrtn['data'];	
+			$this->dimension = $validatorrtn['data'];
+			foreach ($this->dimension as $key => $val)
+			{
+				putenv(strtoupper($key)."=$val");
+				debug("[putenv] ".strtoupper($key)."=$val" );
+			}	
 		}
 		else
 		{
@@ -90,7 +101,7 @@ class SettingFactory
 	    	}
 			elseif (is_null($default))
 			{
-				throw new Exception("parameter '$name' return false", ERROR_CONFIG_RETURN_FALSE);
+				throw new Exception("parameter '$name' cannot be loaded", ERROR_CONFIG_RETURN_FALSE);
 			}
 			else
 			{				
@@ -112,7 +123,7 @@ class SettingFactory
 	    	}
    			elseif (is_null($default))
 			{
-				throw new Exception("parameter '$name' return false", ERROR_CONFIG_RETURN_FALSE);
+				throw new Exception("parameter '$name' returns nothing", ERROR_CONFIG_RETURN_FALSE);
 			}
 			else
 			{				
@@ -130,7 +141,7 @@ class SettingFactory
 		if ($filename !== false && !in_array($filename, get_required_files()))
 		{
 			require_once($filename);
-			echo "found: $filename<br/>\n";			
+			debug("[found] $filename");		
 			spl_autoload_register(array('Doctrine', 'autoload'));	
 		}	
 		return Doctrine_Manager::getInstance();

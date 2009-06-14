@@ -1,10 +1,35 @@
-alpha:
-  default:
-    dsn: 'mysql://root@localhost/utopia'
-  farmA:
-    dsn: 'mysql://root@localhost/utopiaA'
-  farmB:
-    dsn: 'mysql://root@localhost/utopiaB'
-beta:
-staging:
-prod:
+BASE:
+  alpha:
+    default:
+      dsn: 'mysql://root@localhost/utopia'
+    farmA:
+      dsn: 'mysql://root@localhost/utopiaA'
+    farmB:
+      dsn: 'mysql://root@localhost/utopiaB'
+  beta:    ~
+  staging: ~
+  prod:    ~
+
+USERCENTRAL:
+  alpha:
+    default:
+      dsn: 'mysql://root@localhost/usercentral'
+  beta:    ~
+  staging: ~
+  prod:    ~
+
+ANALYTICS:
+  alpha:
+    default:
+      dsn: 'mysql://root@localhost/analytics'
+  beta:    ~
+  staging: ~
+  prod:    ~
+
+MALLOCWORKS:
+  alpha:
+    default:
+      dsn: 'mysql://root@localhost/mallocworks'
+  beta:    ~
+  staging: ~
+  prod:    ~

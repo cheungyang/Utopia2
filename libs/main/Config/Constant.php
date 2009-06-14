@@ -1,14 +1,17 @@
 <?php
-define('DIR_UTOPIA_BASE'			, 'd:/xampp/htdocs/utopia/');
+//define('DIR_UTOPIA_BASE'			, 'd:/xampp/htdocs/utopia/');
 //define('DIR_UTOPIA_BASE'			, '/home/ycheung/source/utopia/'); 
+define('DIR_UTOPIA_BASE'			, '/home/utopia/source/');
 
-define('WEB_UTOPIA_BASE'			, 'http://localhost/utopia/');
+//define('WEB_UTOPIA_BASE'			, 'http://localhost/utopia/');
+define('WEB_UTOPIA_BASE'			, 'http://localhost/source/');
 
 //---------------------------------------------------------------------------
 
 define('DIR_LIB_ROOT'				, DIR_UTOPIA_BASE. 'libs/'); 
 define('DIR_CONF_ROOT'				, DIR_UTOPIA_BASE. 'conf/');
 define('DIR_APP_ROOT'				, DIR_UTOPIA_BASE. 'apps/');
+define('DIR_MODULE_ROOT'			, DIR_UTOPIA_BASE. 'modules/');
 define('DIR_CACHE_ROOT'				, DIR_UTOPIA_BASE. 'cache/');
 define('DIR_WEB_ROOT'				, DIR_UTOPIA_BASE. 'web/');
 

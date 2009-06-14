@@ -1,13 +1,24 @@
 <?php
+function debug($message)
+{
+	echo "$message\n";
+}
 
 function autoLoader($className){
+
+	$property = getenv('PROPERTY') !== false? strtolower(getenv('PROPERTY')).'/': '';
 
 	//array(dirname, depth)
 	$directories = array(
       	array(DIR_LIB_ROOT.'main/', 999),		
-      	array(DIR_APP_ROOT.'models/', 999),
+      	array(DIR_MODULE_ROOT. $property, 999),
 		array(DIR_LIB_ROOT.'vendor/', 0),      	
     );
+    
+//    foreach($directories as $dir)
+//    {
+//    	debug("[autoload] {$dir[0]}, level {$dir[1]}");
+//    }
 
     $fileNameFormats = array(
       '%s.php',
@@ -16,7 +27,7 @@ function autoLoader($className){
     // this is to take care of the PEAR style of naming classes
     $path = str_ireplace('_', '/', $className);
     if(@include_once $path.'.php'){
-    	//echo "found: $path\n";
+    	debug("[found] $path");
         return;
     }
    
@@ -29,7 +40,7 @@ function autoLoader($className){
         foreach($fileNameFormats as $fileNameFormat){
             $path = $directory.sprintf($fileNameFormat, $className);
             if(file_exists($path)){
-            	//echo "found: $path\n";
+            	debug("[found] $path");
                 include_once $path;
                 return;
             }

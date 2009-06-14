@@ -18,7 +18,7 @@ class HelperFactory
 			if (file_exists($filenamefull))
 			{
 				include_once($filenamefull);
-				//echo "found: $filenamefull<br/>\n";
+				debug("[found] $filenamefull");
 			}
 			else
 			{
