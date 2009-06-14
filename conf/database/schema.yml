@@ -1,5 +1,25 @@
 BASE:
 
+  ENTITY:
+    properties:
+      actas: 
+        Timestampable:  ~
+        Sluggable:  { fields: [name], name: permlink, unqiue: false, canUpdate: true}              
+    columns:
+      id:         { type: integer(20), primary: true, autoincrement: true }
+      property:   { type: enum, values: [%s], notnull: true }
+      model:      { type: enum, values: [%s], notnull: true }
+      name:       { type: string(100), notnull: true }
+      is_active:  { type: integer(1), default: 1 }
+      is_block:   { type: integer(1), default: 0 }
+      is_close:   { type: integer(1), default: 0 }
+      is_delete:  { type: integer(1), default: 0 }
+    relations:
+      Maps:   { class: Entity, foreignAlias: Entity, refClass: Map, foreign: tgt_id, local: src_id }
+      Owns:   { class: Entity, foreignAlias: Entity, refClass: Own, foreign: tgt_id, local: src_id }
+    indexes:
+      idx_permlink: { fields: [property, model, permlink], type: unique }
+    
   PAGE:
     properties:	  { translateable: true, chainable: false, versionable: true }
     datasource:   file

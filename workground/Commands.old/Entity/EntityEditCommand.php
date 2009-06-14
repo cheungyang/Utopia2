@@ -7,7 +7,7 @@ class EntityEditCommand extends BaseCommand implements ICommand
 	{
 		$settings = SettingFactory::getSettings();
 		$settings->getConnection();		
-		$schematext = 'schema_'. strtoupper($this->_params['property']). '_'. strtoupper($this->_params['model']);
+		$schematext = 'schema_'.$this->_params['model'];
 		$entityfields = array('name','is_active','is_block','is_close','is_delete');
 
 		//check inputs
@@ -29,7 +29,6 @@ class EntityEditCommand extends BaseCommand implements ICommand
 			//TODO: throw all errors 
 			throw $validatorrtn['errors'][0];
 		}
-
 		
 		//get record
 	    $params = array(

@@ -11,17 +11,14 @@ if ($argc != 2)
 	echo "syntax: php {$argv[0]} [property]\n";
 	die();
 }
+
 $property = strtoupper($argv[1]);
-
 require_once('../libs/main/Config/SettingFactory.php');
-$settings = SettingFactory::getSettings(array('env'=>'alpha', 'propery'=>$property));
-
-$schema = array_merge(
-	$settings->get('schema_BASE'),
-	$settings->get('schema_'.$property)
-);
+$settings = SettingFactory::getSettings(array('env'=>'alpha', 'property'=>$property));
 
 //------------------------------------------------------
+$schema = array_merge($settings->get('schema_BASE'), $settings->get('schema_'.$property));
+//pr($schema);
 $models     	= "'".implode("', '",array_keys($schema))."'";
 $cults      	= NAME_CULTS;
 $defaultcult 	= NAME_DEFAULT_CULT;
@@ -29,28 +26,8 @@ $relationships 	= NAME_RELATIONSHIPS;
 $defaultrel 	= NAME_DEFAULT_REL;
 $properties 	= NAME_PROPERTIES;
 
+//------------------------------------------------------
 $entity = <<<SCHEMA
-Entity:
-  tableName:    entity
-  actAs:
-    Timestampable:  ~
-    Sluggable:  { fields: [name], name: permlink, unqiue: false, canUpdate: true}
-  options:      { type: InnoDB, collate: utf8_unicode_ci, charset: utf8 }
-  columns:
-    id:         { type: integer(20), primary: true, autoincrement: true }
-    property:   { type: enum, values: [$properties], notnull: true }
-    model:      { type: enum, values: [$models], notnull: true }
-    name:       { type: string(100), notnull: true }
-    is_active:  { type: integer(1), default: 1 }
-    is_block:   { type: integer(1), default: 0 }
-    is_close:   { type: integer(1), default: 0 }
-    is_delete:  { type: integer(1), default: 0 }
-  relations:
-    Maps:   { class: Entity, foreignAlias: Entity, refClass: Map, foreign: tgt_id, local: src_id }
-    Owns:   { class: Entity, foreignAlias: Entity, refClass: Own, foreign: tgt_id, local: src_id }
-  indexes:
-    idx_permlink: { fields: [property, model, permlink], type: unique }
-
 Map:
   tableName:    map
   actAs:        [Timestampable]
@@ -78,7 +55,7 @@ Own:
     tgt_id:     { type: integer(20), primary: true }
     src_model:  { type: enum, values: [$models], notnull: true }
     tgt_model:  { type: enum, values: [$models], notnull: true }
-    rel:        { type: enum, values: [$relationships] }, default: $defaultrel, notnull: true }
+    rel:        { type: enum, values: [$relationships], default: $defaultrel, notnull: true }
     is_active:  { type: integer(1), default: 1 }
     is_block:   { type: integer(1), default: 0 }
     is_close:   { type: integer(1), default: 0 }
@@ -115,39 +92,57 @@ $entityseqArr = Yaml::load("seq: { type: integer(11), notnull: true }");
 
 $rtn = $entityArr;
 foreach ($schema as $modelname => $spec)
-{   
-    $one = $entitybaseArr;
+{
+	$one = array();   
 	$one['tableName'] 	= strtolower(trim($modelname));
-	if (isset($colspec['properties']['actas']))
-		$one['actAs'] =  array_merge($one['actAs'], $colspec['properties']['actas']);
-    
+
+	if (isset($spec['properties']['actas']))
+	{
+		$one['actAs'] =  isset($one['actAs'])? array_merge($one['actAs'], $spec['properties']['actas']): $spec['properties']['actas'];
+	}
+	
 	foreach($spec['columns'] as $colname => $colspec)
 	{
 		foreach($colspec as $name => $value)
-		{
+		{		
 			switch($name)
 			{
 				case 'type':		$one['columns'][$colname]['type'] = $value; break;
 				case 'required': 	if ($value) $one['columns'][$colname]['notnull'] = true; break;
 				case 'default': 	if (!empty($value)) $one['columns'][$colname]['default'] = $value; break;
-				case 'values': 		if (!empty($value)) $one['columns'][$colname]['values'] = $value; break;
+				case 'values':		if (!empty($value)) $one['columns'][$colname]['values'] = $value; break;
+				case 'primary': 	if (!empty($value)) $one['columns'][$colname]['primary'] = $value; break;
+				case 'autoincrement': if (!empty($value)) $one['columns'][$colname]['autoincrement'] = $value; break;
 				default:
 			}	
 		}
 	}
 	
-	if (isset($spec['properties']['translateable']) && $spec['properties']['translateable'] == true)
-		$one['columns'] = array_merge($one['columns'], $entitycultArr);
-	if (isset($spec['properties']['chainable']) && $spec['properties']['chainable'] == true)
-		$one['columns'] = array_merge($one['columns'], $entityseqArr);
-	if (isset($spec['properties']['versionable']) && $spec['properties']['versionable'] == true)
-		$one['columns'] = array_merge($one['columns'], $entityversionArr);
-
-	$rtn[ucfirst(strtolower(trim($modelname)))] = $one;
-	if (isset($spec['properties']['versionable']) && $spec['properties']['versionable'] == true)
+	if (strcasecmp($modelname,'ENTITY') == 0) //special treatment for entity table
 	{
-		$one['tableName'] 	= strtolower(trim($modelname)).'_version';
-		$rtn[ucfirst(strtolower(trim($modelname.'_version')))] = $one;
+		$one['columns']['property']['values'] = explode(',',$properties);
+		$one['columns']['model']['values'] = array_keys($schema);
+		$one['relations'] = isset($one['relations'])? array_merge($one['relations'], $spec['relations']): $spec['relations'];
+		$one['indexes'] = isset($one['indexes'])? array_merge($one['indexes'], $spec['indexes']): $spec['indexes'];
+		$rtn[ucfirst(strtolower(trim($modelname)))] = $one;	
+	}
+	else //for all other models
+	{	
+		$one = array_merge($entitybaseArr, $one);
+		
+		if (isset($spec['properties']['translateable']) && $spec['properties']['translateable'] == true)
+			$one['columns'] = array_merge($one['columns'], $entitycultArr);
+		if (isset($spec['properties']['chainable']) && $spec['properties']['chainable'] == true)
+			$one['columns'] = array_merge($one['columns'], $entityseqArr);
+		if (isset($spec['properties']['versionable']) && $spec['properties']['versionable'] == true)
+			$one['columns'] = array_merge($one['columns'], $entityversionArr);
+		
+		$rtn[ucfirst(strtolower(trim($modelname)))] = $one;
+		if (isset($spec['properties']['versionable']) && $spec['properties']['versionable'] == true)
+		{
+			$one['tableName'] 	= strtolower(trim($modelname)).'_version';
+			$rtn[ucfirst(strtolower(trim($modelname.'_version')))] = $one;
+		}
 	}
 }
 

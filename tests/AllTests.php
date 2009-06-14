@@ -3,7 +3,7 @@ class AllTests
 {
 	private static function includeTests($indir)
 	{
-		$indir='/home/utopia/source/tests';
+		$indir='/home/utopia/source/tests/current';
 		
 		$getstr = 'Test.php';
 		$getstrlen = -1 * strlen($getstr);

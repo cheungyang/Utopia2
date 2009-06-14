@@ -5,8 +5,17 @@ class EntityAddCommand extends BaseCommand implements ICommand
 	
 	protected function doCommand()
 	{	
-		$settings = SettingFactory::getSettings();	
-		$schematext = 'schema_'. strtoupper($this->_params['property']). '_'. strtoupper($this->_params['model']);
+		$settings = SettingFactory::getSettings();
+		$settings->getConnection();		
+		$schematext = "schema_". strtoupper($this->_params['property']). "_". strtoupper($this->_params['model']);
+		
+		//get datasource class
+		$dsnane = ucfirst($settings->get($schematext.'_datasource')). 'DS';
+		if (!class_exists($dsname))
+		{
+			throw new Exception("class '$classname' not exist", ERROR_CLASS_NOT_EXIST);
+		}
+		$this->_ds = new $dsname();
 
 		
 		//validation
@@ -69,7 +78,6 @@ class EntityAddCommand extends BaseCommand implements ICommand
 			throw $validatorrtn['errors'][0];
 		}
 		
-		
 		//if has id, check if the exact same record exists
 		if (isset($this->_params['id']))
 		{		
@@ -97,7 +105,6 @@ class EntityAddCommand extends BaseCommand implements ICommand
 			}
 		}
 
-		
 		//if has id, get entity
 		if (isset($this->_params['id']))
 		{
@@ -127,48 +134,42 @@ class EntityAddCommand extends BaseCommand implements ICommand
 		}
 		else
 		{
-			//create entity	
-			$inentity = array();
-			$inentity['model'] 	= $this->_params['model'];
-			$inentity['property'] = $this->_params['property'];
-			$inentity['name'] 	= $this->_params['name'];
-			$inentity['is_active']= $filtered['is_active'];
-			$inentity['is_block'] = $filtered['is_block'];
-			$inentity['is_close'] = $filtered['is_close'];
-			$inentity['is_delete']= $filtered['is_delete'];
-
-			//get datasource
-			$this->_ds = DSFactory::getDS($settings->get($schematext.'_datasource'));
-			$entity = $this->_ds->create(array('entityname'=>'entity', 'inputs'=>$inentity));
+			//create entity		
+			$entity = new Entity();
+			$entity['model'] 	= $this->_params['model'];
+			$entity['property'] = $this->_params['property'];
+			$entity['name'] 	= $this->_params['name'];
+			$entity['is_active']= $filtered['is_active'];
+			$entity['is_block'] = $filtered['is_block'];
+			$entity['is_close'] = $filtered['is_close'];
+			$entity['is_delete']= $filtered['is_delete'];
+			$entity->save();
 		}	
 		
-				
 		//get model name
 		if ($settings->get($schematext.'_properties_versionable', false) && $this->_params['versiondb'])
 		{
-			$modelname = $this->_params['model'].'_version';
+			$modelname = ucfirst(strtolower($this->_params['model'])).'_version';
 		}
 		else
 		{
-			$modelname = $this->_params['model'];
+			$modelname = ucfirst(strtolower($this->_params['model']));
 		}		
-
-		
+		if (!class_exists($modelname))
+		{
+			throw new Exception("model class '$modelname' does not exist.", ERROR_CLASS_NOT_EXIST);
+		}	
+			
 		//create subentity
-		$insubentity = array();
+		$subentity = new $modelname();
     	foreach ($filtered as $paramkey => $paramval)
     	{
-			$insubentity[$paramkey] = $paramval;
+			$subentity[$paramkey] = $paramval;
     	}   
-    	$insubentity['name'] = $this->_params['name'];
-    	$insubentity['Entity'] = $entity;
+    	$subentity['name'] = $this->_params['name'];
+    	$subentity['Entity'] = $entity;
+    	$subentity->save();
     	
-    	
-		//get datasource
-		$this->_ds = DSFactory::getDS($settings->get($schematext.'_datasource'));
-		$subentity = $this->_ds->create(array('entityname'=>$modelname, 'inputs'=>$insubentity));
-	    	
-   	
     	//if versionable and in version db, revert this to main db
     	if ($settings->get($schematext.'_properties_versionable', false) && $this->_params['versiondb'])
     	{

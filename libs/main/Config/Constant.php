@@ -23,11 +23,11 @@ define('FAIL'						, 0);
 define('SUCCESS'					, 1);
 
 define('NAME_ENTITY'				, 'ENTITY');
-define('NAME_CULTS'					, 'ZH,EN,CH,NONE' );
+define('NAME_CULTS'					, 'ZH, EN, CH, NONE' ); //space is needed to be parsed by yml
 define('NAME_DEFAULT_CULT'			, 'NONE' );
-define('NAME_RELATIONSHIPS'			, 'MAP,OWN,REQUEST,INVITE,CONNECT' );
+define('NAME_RELATIONSHIPS'			, 'MAP, OWN, REQUEST, INVITE, CONNECT' );
 define('NAME_DEFAULT_REL'			, 'OWN' );
-define('NAME_PROPERTIES'			, 'MALLOCWORKS,WILGRIST' );
+define('NAME_PROPERTIES'			, 'MALLOCWORKS, WILGRIST' );
 
 define('ERROR_REQUIRED_MISSING'		, 3000);
 define('ERROR_NOT_IMPLEMENTED'		, 3001);

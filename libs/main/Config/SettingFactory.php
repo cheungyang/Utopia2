@@ -56,11 +56,6 @@ class SettingFactory
 	private function __construct($dimension)
 	{				
 		$this->configSettings();
-		
-//		if (isset($dimension['property']))
-//		{
-//			putenv("PROPERTY={$dimension['property']}");
-//		}
 				
 		$validator = ValidatorFactory::getValidator($dimension, $this->spec);
 		$validatorrtn = $validator->execute();
@@ -84,7 +79,9 @@ class SettingFactory
 	public function get($name, $default=null, $folder='database')
 	{
 		if (isset($this->cacheconfig[$name]))
-			return $this->cacheconfig[$name];		
+		{
+			return $this->cacheconfig[$name];
+		}		
 			
 	    $struct = explode('_',$name);
     	if (!isset($this->config[$struct[0]])) //get file
@@ -94,8 +91,12 @@ class SettingFactory
 	    	if (file_exists($filename))
 	    	{
 	    	    ob_start();		
-	    		include($filename);	    		
+	    		include($filename); //include to parse php tags in yml
 	    		$filestr = ob_get_contents();
+	    		if (!empty($replaces))
+	    		{
+	    			$filestr = vsprintf($filestr, $replaces);
+	    		}    			    		
 	    		ob_end_clean();
 				$this->config[$struct[0]] = Yaml::load($filestr);
 	    	}
@@ -108,6 +109,7 @@ class SettingFactory
 				return $default;
 			}
 	    }
+	    
 	    $count = count($struct);	//get config
 	   	$config = $this->config[$struct[0]];
 	    for($i=1; $i<$count; $i++)
@@ -115,7 +117,7 @@ class SettingFactory
 	    	$longeststr = implode('_',array_slice($struct, $i));
 	    	if (isset($config[$longeststr]))
 	    	{
-	    		return $config[$longeststr];
+    			return $config[$longeststr];
 	    	}	    		
 	    	elseif (isset($config[$struct[$i]]))
 	    	{
@@ -126,7 +128,7 @@ class SettingFactory
 				throw new Exception("parameter '$name' returns nothing", ERROR_CONFIG_RETURN_FALSE);
 			}
 			else
-			{				
+			{
 				return $default;
 			}
 	    }

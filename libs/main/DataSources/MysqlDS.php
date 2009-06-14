@@ -1,6 +1,37 @@
 <?php
-class MysqlDS extends BaseDS implements DSFactory
+class MysqlDS extends BaseDS implements IDataSource
 {
+	public function create($params)
+	{
+		//validate inputs
+		$spec = array(
+			'entityname'=> array('required'=>true),
+			'inputs'	=> array('required'=>true),
+		);	
+		$validator = ValidatorFactory::getValidator($params, $spec);
+		$validatorrtn = $validator->execute();
+		if ($validatorrtn['status'] === FAIL)
+		{
+			//TODO: throw multiple errors
+			throw $validatorrtn['errors'][0];
+		}
+		$filtered = $validatorrtn['data'];
+	
+		$entname = ucfirst(strtolower($filtered['entityname']));
+		if (class_exists($entname))
+		{
+			$entity = new $entname();
+			$entity = array_merge($filtered['entity'], $filtered['inputs']);
+			$entity->save();
+			return $entity;
+		}
+		else
+		{
+			throw new Exception("class '$entname' not exist", ERROR_CLASS_NOT_EXIST);
+		}		
+	}
+	
+	
   	public function getMaxVersionCount($idx)
 	{
 		$settings = SettingFactory::getSettings();

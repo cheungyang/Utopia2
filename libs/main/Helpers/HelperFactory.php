@@ -1,6 +1,8 @@
 <?php
 class HelperFactory
 {
+	private static $_addedhelpers = array();
+	
 	static public function getHelpers($names)
 	{
 		if (!is_array($names))
@@ -15,9 +17,10 @@ class HelperFactory
 			$filename = ucfirst(strtolower($name)).'Helper';
 			$filenamefull = dirname(__FILE__).'/'.$filename.'.php';
 
-			if (file_exists($filenamefull))
+			if (file_exists($filenamefull) && !in_array($name, self::$_addedhelpers))
 			{
 				include_once($filenamefull);
+				self::$_addedhelpers[] = $name;
 				debug("[found] $filenamefull");
 			}
 			else

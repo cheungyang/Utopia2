@@ -1,7 +1,7 @@
 <?php
 class FilterFactory
 {	
-	static $instances = array();
+	private static $instances = array();
 	
 	static public function getFilter($name)
 	{
@@ -16,7 +16,7 @@ class FilterFactory
 		} 
 		else
 		{
-			throw new Exception("class '$classname' not exist", ERROR_CLASS_NOT_EXIST);
+			throw new Exception("class '$filtername' not exist", ERROR_CLASS_NOT_EXIST);
 		} 		
 	}
 }
